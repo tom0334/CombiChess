@@ -5,7 +5,8 @@ import chess.uci
 import sys
 
 #file names for the engines
-engineNames = ["stockfish5", "komodo8" , "andscacs"]
+enginePath= "/engines/"
+engineFileNames = ["stockfish5", "komodo8" , "andscacs"]
 
 #current board status, probably received from UCI position commands
 board = chess.Board()
@@ -32,7 +33,7 @@ def onEngine2Finished(command):
 
 def loadEngines():
 	for i in xrange(0, len(engines)):
-		engines[i] = chess.uci.popen_engine( "./" + engineNames[i]) 
+		engines[i] = chess.uci.popen_engine( "./" + enginePath + engineFileNames[i]) 
 		engines[i].uci()
 		engines[i].ucinewgame()
 
@@ -66,7 +67,7 @@ def onFinished(command, index):
 	engineMove, ponder = command.result()
 
 	#log the result
-	EngineName = engineNames[index]
+	EngineName = engineFileNames[index]
 	mprint("info string " + EngineName + " says:	       " + str(engineMove))
 
 	#set the move in the found moves
