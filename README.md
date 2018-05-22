@@ -31,3 +31,7 @@ StockFish 5 was used for was used as engine 0, as it is ranked the highest. Test
 Tournament 1, 100 games, CombiChess[StockFish5,Komodo8,Andscacs0,93] vs StockFish 5:
   
 33 wins for CombiChess, 14 wins for Stockfish5, 53 draws.
+
+Tournament 2, 100 games, CombiChess[StockFish5,Komodo8,Andscacs0,93] vs Komodo 8:
+
+27 wins for CombiChess, 20 wins for Komodo8, 53 draws.
