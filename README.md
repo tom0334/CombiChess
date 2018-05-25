@@ -1,3 +1,4 @@
+
 # CombiChess
 
 CombiChess a "chess engine" that combines 3 engines into one. It works by essentially asking 3 different engines what the they think is the best move for a given position, and then applying some logic to determine what move to actually do.  After initial testing, it seems like it can easily beat the strongest of the 3 engines on its own.
@@ -25,13 +26,16 @@ For the best results, the 3 engines that are used need to be as equal in strengt
     
 As opponent i also used Stockfish 5, to essentially see if StockFish could be improved with the help of two slightly lesser engines.
     
-StockFish 5 was used for was used as engine 0, as it is ranked the highest. Testing with other engines as engine0 will follow.  
+StockFish 5 was used for was used as engine 0, as it is ranked the highest. Testing with other engines as engine0 will follow. 
   
 ## Initial Results
-Tournament 1, 100 games, CombiChess[StockFish5,Komodo8,Andscacs0,93] vs StockFish 5:
-  
-33 wins for CombiChess, 14 wins for Stockfish5, 53 draws.
 
-Tournament 2, 100 games, CombiChess[StockFish5,Komodo8,Andscacs0,93] vs Komodo 8:
+CombiChess vs Stockfish5:  33 - 14  with 53 draws 
 
-27 wins for CombiChess, 20 wins for Komodo8, 53 draws.
+CombiChess vs Komodo8:  27 - 20  with  53 draws.
+
+CombiChess vs Andscacs0.93:  39 - 16 with 45 draws.
+
+
+## Initial Conclusion
+Combichess with Stockfish 5 as master seems to  be quite significantly stronger than any of the 3 engines that it uses! More testing with other engines as master is coming soon!  
