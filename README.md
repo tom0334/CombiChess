@@ -24,18 +24,21 @@ For the best results, the 3 engines that are used need to be as equal in strengt
   * Komodo 8 (3236)
   * Andscacs 0.93 (3209)
     
-As opponent i also used Stockfish 5, to essentially see if StockFish could be improved with the help of two slightly lesser engines.
+As opponents i also used those engines, to essentially see if they can be improved with the help of two other engines similar in strength.
     
 StockFish 5 was used for was used as engine 0, as it is ranked the highest. Testing with other engines as engine0 will follow. 
   
-## Initial Results
+## Results summary:
 
-CombiChess vs Stockfish5:  33 - 14  with 53 draws 
+This table shows all results so far. The scores are all from the POV of Combichess, 33 -14 means that Combichess won 33 games, the opponent won 14 and the rest of the 100 games were draws.
 
-CombiChess vs Komodo8:  27 - 20  with  53 draws.
+| ↓OPPONENT↓  →MASTER ENGINE→ 	| Stockfish 5 	| Komodo 8 	| Andscacs 0.93 	|
+|------------------------------|-------------	|----------	|---------------	|
+|**Stockfish 5**              	   | 33 - 14     	| 32 - 18  	|               	|
+|**Komodo 8**                  	  | 27 - 20     	| 36 - 15  	|               	|
+|**Andscacs 0.93**             	  | 39 - 16     	| 38 - 11  	|               	|
 
-CombiChess vs Andscacs0.93:  39 - 16 with 45 draws.
 
 
 ## Initial Conclusion
-Combichess with Stockfish 5 as master seems to  be quite significantly stronger than any of the 3 engines that it uses! More testing with other engines as master is coming soon!  
+Combichess with both Stockfish 5 and Komodo8 as master seems to  be quite significantly stronger than any of the 3 engines that it uses! More testing with other engines as master is coming soon!  
