@@ -38,7 +38,7 @@ This table shows all results so far. The scores are all from the POV of Combiche
 |----------------------------|-------------	|----------	|---------------	|
 |**Stockfish 5**             | 33 - 14     	| 32 - 18  	|46 - 9          |
 |**Komodo 8**                | 27 - 20     	| 36 - 15  	|               	|
-|**Andscacs 0.93**           | 39 - 16     	| 38 - 11  	|               	|
+|**Andscacs 0.93**           | 39 - 16     	| 38 - 11  	|46 - 9         	|
 
 
 
