@@ -34,11 +34,11 @@ Testing was done for each engine as master, against all opponents. For example: 
 
 This table shows all results so far. The scores are all from the POV of Combichess, 33 -14 means that Combichess won 33 games, the opponent won 14 and the rest of the 100 games were draws.
 
-| ↓OPPONENT↓  →MASTER ENGINE→| Stockfish 5 	| Komodo 8 	| Andscacs 0.93 	|
-|----------------------------|-------------	|----------	|---------------	|
-|**Stockfish 5**             | 33 - 14     	| 32 - 18  	|46 - 9          |
-|**Komodo 8**                | 27 - 20     	| 36 - 15  	|52 - 14        	|
-|**Andscacs 0.93**           | 39 - 16     	| 38 - 11  	|46 - 9         	|
+| ↓OPPONENT↓  →MASTER ENGINE→| CombiChess With Stockfish 5 	|  CombiChess with Komodo 8 	| CombiChess with Andscacs 0.93 	|
+|----------------------------|------------------------------|----------------------------|--------------------------------|
+|**Stockfish 5**             | 33 - 14                 	    | 32 - 18  	                 | 46 - 9                         |
+|**Komodo 8**                | 27 - 20     	                | 36 - 15  	                 | 52 - 14        	               |
+|**Andscacs 0.93**           | 39 - 16     	                | 38 - 11  	                 | 46 - 9         	               |
 
 
 
