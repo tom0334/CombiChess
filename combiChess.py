@@ -33,7 +33,14 @@ def onEngine2Finished(command):
 
 def loadEngines():
 	for i in xrange(0, len(engines)):
-		engines[i] = chess.uci.popen_engine( "./" + enginePath + engineFileNames[i]) 
+		try:
+			engines[i] = chess.uci.popen_engine("./" + enginePath + engineFileNames[i])
+		except:
+			sys.stderr.write("CombiChess Error: could not load the engine at file path:" + engineFileNames[i])
+			sys.stderr.write("\n\nDid you change the script to include the engines you want to use with Combichess?")
+			sys.stderr.write("To do this, open Combichess.py and change the engineFilePaths.\n")
+			sys.exit()
+			
 		engines[i].uci()
 		engines[i].ucinewgame()
 
@@ -178,4 +185,3 @@ while( not exit):
 		mprint("uciok")
 	else:
 		mprint("unknown command")
-	
