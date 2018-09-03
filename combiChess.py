@@ -114,30 +114,28 @@ class CombiChess:
 
         # log the result
         EngineName = engineFileNames[index]
-        mprint("info string " + EngineName + " says:	       " + str(engineMove))
+        mprint("info string " + EngineName + " says:\t" + str(engineMove))
 
         # set the move in the found moves
         self.moves[index] = engineMove
 
-        bestmove = None
-
         # if engine 1 and 2 are done, and they agree on a move, do that move
-        if self.moves[1] != None and self.moves[1] == self.moves[2]:
+        if self.moves[1] is not None and self.moves[1] == self.moves[2]:
             mprint("info string listening to children")
             self.listenedTo[0] += 1
-            bestmove = self.moves[1]
+            bestMove = self.moves[1]
 
         # if engine 0 and another agree, do that move
-        elif self.moves[0] != None and (self.moves[0] == self.moves[1] or self.moves[0] == self.moves[2]):
+        elif self.moves[0] is not None and (self.moves[0] == self.moves[1] or self.moves[0] == self.moves[2]):
             mprint("info string listening to master and another")
             self.listenedTo[1] += 1
-            bestmove = self.moves[0]
+            bestMove = self.moves[0]
 
         # all engines are done and they dont agree. Listen to master
         elif None not in self.moves:
             mprint("info string listening to master")
             self.listenedTo[2] += 1
-            bestmove = self.moves[0]
+            bestMove = self.moves[0]
         # we dont know our best move yet
         else:
             return
@@ -149,7 +147,7 @@ class CombiChess:
         for engine in self.engines:
             engine.stop()
 
-        mprint("bestmove " + str(bestmove))
+        mprint("bestmove " + str(bestMove))
 
     # prints stats on how often was listened to master and how often to children
     def printStats(self):
