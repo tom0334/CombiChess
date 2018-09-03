@@ -9,24 +9,26 @@ import sys
 
 
 class CombiChess:
-    # after a stop command, ignore
-    canceled = False
+    # after a stop command, ignore the finish callback. See onFinished.
+    _canceled = False
 
-    engines = [None, None, None]
-    moves = [None, None, None]
+    # the pythonChess engine objects, loaded from the filePath and fileName
+    _engines = [None, None, None]
+
+    # The current move decided by the engine. None when it doesn't know yet
+    _moves = [None, None, None]
 
     # current board status, probably received from UCI position commands
     board = chess.Board()
 
-    # Statistics for what engines are listened to.
+    # Statistics for how often is listened to each engine.
     listenedTo = [0, 0, 0]
 
-    # Initialized in the init function
+    # Initialized in the init function. These are the folder path and a list of filenames in that folder
     engineFolder = None
     engineFileNames = None
 
     def __init__(self, engineLocation, engineNames):
-        self.exit = False
         self.engineFolder = engineLocation
         self.engineFileNames = engineNames
         printAndFlush("CombiChess 1.0 by T. Friederich")
@@ -34,9 +36,9 @@ class CombiChess:
     # This starts CombiChess.
     def start(self):
         # first start the engines
-        for i in xrange(0, len(self.engines)):
+        for i in xrange(0, len(self._engines)):
             try:
-                self.engines[i] = chess.uci.popen_engine("./" + self.engineFolder + self.engineFileNames[i])
+                self._engines[i] = chess.uci.popen_engine("./" + self.engineFolder + self.engineFileNames[i])
             except:
                 sys.stderr.write("CombiChess Error: could not load the engine at file path:" + self.engineFileNames[i])
                 sys.stderr.write(
@@ -45,14 +47,15 @@ class CombiChess:
                 sys.exit()
 
             # tell the engines to init and start a new game
-            self.engines[i].uci()
-            self.engines[i].ucinewgame()
+            self._engines[i].uci()
+            self._engines[i].ucinewgame()
         # starts the main program
-        self.__mainloop()
+        self._mainloop()
 
     # Main program loop. It keep waiting for input after a command is finished
-    def __mainloop(self):
-        while not self.exit:
+    def _mainloop(self):
+        exit = False
+        while not exit:
             userCommand = raw_input()
 
             if userCommand == "uci":
@@ -67,52 +70,51 @@ class CombiChess:
                 printAndFlush("readyok")
 
             if userCommand.startswith("go"):
-                self.startEngines()
+                self._startEngines()
 
             elif userCommand.startswith("position"):
                 self.handlePosition(userCommand)
 
             elif userCommand == "exit":
-                self.exit = True
+                exit = True
             elif userCommand == "stop":
                 sleep(300)
                 # TODO  fix this
-                printAndFlush(self.moves[0])
+                printAndFlush(self._moves[0])
                 printAndFlush("readyok")
                 printAndFlush("uciok")
             else:
                 printAndFlush("unknown command")
 
     # on engine done callbacks. The number is the index in the engines array
-    def onEngine0Finished(self, command):
-        self.onFinished(command, 0)
+    def _onEngine0Finished(self, command):
+        self._onFinished(command, 0)
 
-    def onEngine1Finished(self, command):
-        self.onFinished(command, 1)
+    def _onEngine1Finished(self, command):
+        self._onFinished(command, 1)
 
-    def onEngine2Finished(self, command):
-        self.onFinished(command, 2)
+    def _onEngine2Finished(self, command):
+        self._onFinished(command, 2)
 
-    def startEngine(self, index, callback):
-        self.engines[index].position(self.board)
-        command = self.engines[index].go(movetime=990, async_callback=callback)
+    def _startEngine(self, index, callback):
+        self._engines[index].position(self.board)
+        command = self._engines[index].go(movetime=990, async_callback=callback)
 
     # mprint("info string started engine " + str(index))
 
-    def startEngines(self):
+    def _startEngines(self):
+        self._moves = [None, None, None]
+        self._canceled = False
 
-        self.moves = [None, None, None]
-        self.canceled = False
-
-        self.startEngine(0, self.onEngine0Finished)
-        self.startEngine(1, self.onEngine1Finished)
-        self.startEngine(2, self.onEngine2Finished)
+        self._startEngine(0, self._onEngine0Finished)
+        self._startEngine(1, self._onEngine1Finished)
+        self._startEngine(2, self._onEngine2Finished)
 
     # this function is called after a engine is done. This means it is called multiple times!
-    def onFinished(self, command, index):
+    def _onFinished(self, command, index):
         # if this callback is called after the UCI stop command,
         # we can just ignore it.
-        if self.canceled:
+        if self._canceled:
             return
 
         engineMove, ponder = command.result()
@@ -122,45 +124,37 @@ class CombiChess:
         printAndFlush("info string " + EngineName + " says:\t" + str(engineMove))
 
         # set the move in the found moves
-        self.moves[index] = engineMove
+        self._moves[index] = engineMove
 
         # if engine 1 and 2 are done, and they agree on a move, do that move
-        if self.moves[1] is not None and self.moves[1] == self.moves[2]:
+        if self._moves[1] is not None and self._moves[1] == self._moves[2]:
             printAndFlush("info string listening to children")
             self.listenedTo[0] += 1
-            bestMove = self.moves[1]
+            bestMove = self._moves[1]
 
         # if engine 0 and another agree, do that move
-        elif self.moves[0] is not None and (self.moves[0] == self.moves[1] or self.moves[0] == self.moves[2]):
+        elif self._moves[0] is not None and (self._moves[0] == self._moves[1] or self._moves[0] == self._moves[2]):
             printAndFlush("info string listening to master and another")
             self.listenedTo[1] += 1
-            bestMove = self.moves[0]
+            bestMove = self._moves[0]
 
         # all engines are done and they dont agree. Listen to master
-        elif None not in self.moves:
+        elif None not in self._moves:
             printAndFlush("info string listening to master")
             self.listenedTo[2] += 1
-            bestMove = self.moves[0]
+            bestMove = self._moves[0]
         # we dont know our best move yet
         else:
             return
 
         self.printStats()
 
-        self.canceled = True
+        self._canceled = True
         # stop remaining engines
-        for engine in self.engines:
+        for engine in self._engines:
             engine.stop()
 
         printAndFlush("bestmove " + str(bestMove))
-
-    # prints stats on how often was listened to master and how often to children
-    def printStats(self):
-        printAndFlush("info string listenStats [C, M+C, M] " + str(self.listenedTo))
-        totalSum = self.listenedTo[0] + self.listenedTo[1] + self.listenedTo[2]
-        masterSum = self.listenedTo[1] + self.listenedTo[2]
-        masterPercent = (float(masterSum) / float(totalSum)) * 100.0
-        printAndFlush("info string Master % " + str(masterPercent))
 
     # handle UCI position command
     def handlePosition(self, positionInput):
@@ -187,6 +181,15 @@ class CombiChess:
 
         # show the board
         printAndFlush(self.board)
+
+    # prints stats on how often was listened to master and how often to children
+    def printStats(self):
+        printAndFlush("info string listenStats [C, M+C, M] " + str(self.listenedTo))
+        totalSum = self.listenedTo[0] + self.listenedTo[1] + self.listenedTo[2]
+        masterSum = self.listenedTo[1] + self.listenedTo[2]
+        masterPercent = (float(masterSum) / float(totalSum)) * 100.0
+        printAndFlush("info string Master % " + str(masterPercent))
+
 
 
 # UTILS
