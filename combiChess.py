@@ -78,11 +78,8 @@ class CombiChess:
             elif userCommand == "exit":
                 exit = True
             elif userCommand == "stop":
-                sleep(300)
-                # TODO  fix this
-                printAndFlush(self._moves[0])
-                printAndFlush("readyok")
-                printAndFlush("uciok")
+                for en in self._engines:
+                    en.stop()
             else:
                 printAndFlush("unknown command")
 
@@ -98,7 +95,7 @@ class CombiChess:
 
     def _startEngine(self, index, callback):
         self._engines[index].position(self.board)
-        command = self._engines[index].go(movetime=990, async_callback=callback)
+        command = self._engines[index].go(movetime=1000, async_callback=callback)
 
     # mprint("info string started engine " + str(index))
 
