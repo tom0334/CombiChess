@@ -1,7 +1,7 @@
 
 # CombiChess
 
-CombiChess a "chess engine" that combines 3 engines into one. It works by essentially asking 3 different engines what the they think is the best move for a given position, and then applying some logic to determine what move to actually do.  After initial testing, it seems like it can easily beat the strongest of the 3 engines on its own.
+CombiChess a "chess engine" that combines 3 engines into one. It works by asking 3 different engines what they think the best move is for a given position, and then applying some logic to determine what move to actually do.  After initial testing, it seems like it can easily beat the strongest of the 3 engines on its own.
 
 The rules that it uses are fairly simple:
   * If 2 out of 3 engines give the same best move, then do that move and cancel work of the third.
@@ -25,12 +25,12 @@ For the best results, the 3 engines that are used need to be as equal in strengt
   * Andscacs 0.93 (3209)
   
     
-As opponents i also used those engines, to essentially see if they can be improved with the help of two other engines similar in strength. Later on i plan on playing against other engines as well.
+As opponents i also used those engines, to see if they can be improved with the help of two other engines similar in strength. Later on i plan on playing against other engines as well.
 
 Testing was done for each engine as master, against all opponents. For example: Combichess with Stockfish as master/engine0 and the other two engines as engine1 and engine2, was first tested against Stockfish on its own, then against komodo and then against Andcacs. I did the same for the other engines as master.
 
   
-## Results(so far, still in progress):
+## Results:
 
 This table shows all results so far. The scores are all from the POV of Combichess, 33 -14 means that Combichess won 33 games, the opponent won 14 and the rest of the 100 games were draws.
 
@@ -40,7 +40,10 @@ This table shows all results so far. The scores are all from the POV of Combiche
 |**Komodo 8**                | 27 - 20     	                | 36 - 15  	                 | 52 - 14        	               |
 |**Andscacs 0.93**           | 39 - 16     	                | 38 - 11  	                 | 46 - 9         	               |
 
-
-
 ## Initial Conclusion
 Combichess with both Stockfish 5 and Komodo8 as master seems to  be quite significantly stronger than any of the 3 engines that it uses! More testing with other engines as master is coming soon!  
+
+## Using CombiChess
+To use combichess, clone the project or download it as a zip. Unzip it if needed, and then place the engines you want to use in the engines folder. Open launcher.py and change the filenames to the ones in the engines folder you want to use.
+
+To run CombiChess, execute the launcher.py, NOT the combichess.py!
