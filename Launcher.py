@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 from combiChess import CombiChess
 
 # file names for the engines. YOU CAN CHANGE THESE

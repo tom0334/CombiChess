@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 import chess
 import chess.uci
 import sys
