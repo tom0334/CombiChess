@@ -70,7 +70,12 @@ class CombiChess:
                 printAndFlush("readyok")
 
             elif userCommand.startswith("go"):
-                self._startEngines()
+                parts = userCommand.split(" ")
+                go_commands = {}
+                for command in ("movetime", "wtime", "btime", "winc", "binc", "depth", "nodes"):
+                    if command in parts:
+                        go_commands[command] = parts[parts.index(command) + 1]
+                self._startEngines(go_commands)
 
             elif userCommand.startswith("position"):
                 self.handlePosition(userCommand)
@@ -93,19 +98,27 @@ class CombiChess:
     def _onEngine2Finished(self, command):
         self._onFinished(command, 2)
 
-    def _startEngine(self, index, callback):
+    def _startEngine(self, index, callback, cmds):
         self._engines[index].position(self.board)
-        command = self._engines[index].go(movetime=1000, async_callback=callback)
+        command = self._engines[index].go(
+            wtime=cmds.get("wtime"),
+            btime=cmds.get("btime"),
+            winc=cmds.get("winc"),
+            binc=cmds.get("binc"),
+            depth=cmds.get("depth"),
+            nodes=cmds.get("nodes"),
+            movetime=cmds.get("movetime"),
+            async_callback=callback)
 
     # mprint("info string started engine " + str(index))
 
-    def _startEngines(self):
+    def _startEngines(self, go_commands):
         self._moves = [None, None, None]
         self._canceled = False
 
-        self._startEngine(0, self._onEngine0Finished)
-        self._startEngine(1, self._onEngine1Finished)
-        self._startEngine(2, self._onEngine2Finished)
+        self._startEngine(0, self._onEngine0Finished, go_commands)
+        self._startEngine(1, self._onEngine1Finished, go_commands)
+        self._startEngine(2, self._onEngine2Finished, go_commands)
 
     # this function is called after a engine is done. This means it is called multiple times!
     def _onFinished(self, command, index):
@@ -183,7 +196,7 @@ class CombiChess:
             printAndFlush(e)
 
         # show the board
-        printAndFlush(self.board)
+        # printAndFlush(self.board)
 
     # prints stats on how often was listened to master and how often to children
     def printStats(self):
