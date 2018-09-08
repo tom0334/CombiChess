@@ -62,13 +62,13 @@ class CombiChess:
                 printAndFlush("id author Tom Friederich")
                 printAndFlush("uciok")
 
-            if userCommand.startswith("option name"):
+            elif userCommand.startswith("option name"):
                 printAndFlush("uciok")
 
-            if userCommand == "isready":
+            elif userCommand == "isready":
                 printAndFlush("readyok")
 
-            if userCommand.startswith("go"):
+            elif userCommand.startswith("go"):
                 self._startEngines()
 
             elif userCommand.startswith("position"):
