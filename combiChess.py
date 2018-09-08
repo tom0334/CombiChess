@@ -1,3 +1,4 @@
+import os
 import sys
 
 import chess
@@ -37,7 +38,7 @@ class CombiChess:
         # first start the engines
         for i in range(0, len(self._engines)):
             try:
-                self._engines[i] = chess.uci.popen_engine("./" + self.engineFolder + self.engineFileNames[i])
+                self._engines[i] = chess.uci.popen_engine(os.path.join(self.engineFolder, self.engineFileNames[i]))
             except:
                 sys.stderr.write("CombiChess Error: could not load the engine at file path:" + self.engineFileNames[i])
                 sys.stderr.write(
