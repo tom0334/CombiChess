@@ -63,8 +63,16 @@ class CombiChess:
                 printAndFlush("id author Tom Friederich")
                 printAndFlush("uciok")
 
-            elif userCommand.startswith("option name"):
-                printAndFlush("uciok")
+            elif userCommand.startswith("setoption name"):
+                # Skip button type options
+                if " value " not in userCommand:
+                    continue
+                options = {}
+                parts = userCommand.split(" ", 2)
+                parts = parts[-1].split("value")
+                options[parts[0]] = parts[1]
+                for engine in self._engines:
+                    engine.setoption(options)
 
             elif userCommand == "isready":
                 printAndFlush("readyok")
