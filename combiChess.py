@@ -1,6 +1,7 @@
+import sys
+
 import chess
 import chess.uci
-import sys
 
 # This class contains the inner workings of combiChess. If you want to change its settings or start it then
 # Please go to launcher.py This file also lets you change what engines CombiChess uses.
@@ -34,7 +35,7 @@ class CombiChess:
     # This starts CombiChess.
     def start(self):
         # first start the engines
-        for i in xrange(0, len(self._engines)):
+        for i in range(0, len(self._engines)):
             try:
                 self._engines[i] = chess.uci.popen_engine("./" + self.engineFolder + self.engineFileNames[i])
             except:
@@ -54,7 +55,7 @@ class CombiChess:
     def _mainloop(self):
         exit = False
         while not exit:
-            userCommand = raw_input()
+            userCommand = input()
 
             if userCommand == "uci":
                 printAndFlush("id name TomsCombiChess")
@@ -186,10 +187,7 @@ class CombiChess:
         printAndFlush("info string Master % " + str(masterPercent))
 
 
-
 # UTILS
 # This function flushes stdout after writing so the UCI GUI sees it
 def printAndFlush(text):
-    arg = str(text)
-    sys.stdout.write(arg + "\n")
-    sys.stdout.flush()
+    print(text, flush=True)
