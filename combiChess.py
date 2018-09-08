@@ -161,9 +161,15 @@ class CombiChess:
         try:
             # handle building up the board from a FEN string
             if words[1] == "fen":
-                fen = positionInput.split(' ', 2)[2]
-                printAndFlush("")
-                self.board.set_fen(fen)
+                rest = positionInput.split(' ', 2)[2]
+                if "moves" in rest:
+                    rest = rest.split()
+                    fen, moves = " ".join(rest[:6]), rest[7:]
+                    self.board.set_fen(fen)
+                    for move in moves:
+                        self.board.push_uci(move)
+                else:
+                    self.board.set_fen(rest)
             # handle board from startpos command, building up the board with moves
             elif words[1] == "startpos":
                 self.board.reset()
