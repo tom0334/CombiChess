@@ -88,7 +88,7 @@ class CombiChess:
             elif userCommand.startswith("position"):
                 self.handlePosition(userCommand)
 
-            elif userCommand == "exit":
+            elif userCommand == "quit":
                 exit = True
             elif userCommand == "stop":
                 for en in self._engines:
