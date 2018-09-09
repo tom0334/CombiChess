@@ -69,7 +69,7 @@ class CombiChess:
                     continue
                 options = {}
                 parts = userCommand.split(" ", 2)
-                parts = parts[-1].split("value")
+                parts = parts[-1].split(" value ")
                 options[parts[0]] = parts[1]
                 for engine in self._engines:
                     engine.setoption(options)
