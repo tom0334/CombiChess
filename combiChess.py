@@ -1,6 +1,8 @@
+import os
+import sys
+
 import chess
 import chess.uci
-import sys
 
 # This class contains the inner workings of combiChess. If you want to change its settings or start it then
 # Please go to launcher.py This file also lets you change what engines CombiChess uses.
@@ -34,9 +36,9 @@ class CombiChess:
     # This starts CombiChess.
     def start(self):
         # first start the engines
-        for i in xrange(0, len(self._engines)):
+        for i in range(0, len(self._engines)):
             try:
-                self._engines[i] = chess.uci.popen_engine("./" + self.engineFolder + self.engineFileNames[i])
+                self._engines[i] = chess.uci.popen_engine(os.path.join(self.engineFolder, self.engineFileNames[i]))
             except:
                 sys.stderr.write("CombiChess Error: could not load the engine at file path:" + self.engineFileNames[i])
                 sys.stderr.write(
@@ -54,26 +56,39 @@ class CombiChess:
     def _mainloop(self):
         exit = False
         while not exit:
-            userCommand = raw_input()
+            userCommand = input()
 
             if userCommand == "uci":
                 printAndFlush("id name TomsCombiChess")
                 printAndFlush("id author Tom Friederich")
                 printAndFlush("uciok")
 
-            if userCommand.startswith("option name"):
-                printAndFlush("uciok")
+            elif userCommand.startswith("setoption name"):
+                # Skip button type options
+                if " value " not in userCommand:
+                    continue
+                options = {}
+                parts = userCommand.split(" ", 2)
+                parts = parts[-1].split(" value ")
+                options[parts[0]] = parts[1]
+                for engine in self._engines:
+                    engine.setoption(options)
 
-            if userCommand == "isready":
+            elif userCommand == "isready":
                 printAndFlush("readyok")
 
-            if userCommand.startswith("go"):
-                self._startEngines()
+            elif userCommand.startswith("go"):
+                parts = userCommand.split(" ")
+                go_commands = {}
+                for command in ("movetime", "wtime", "btime", "winc", "binc", "depth", "nodes"):
+                    if command in parts:
+                        go_commands[command] = parts[parts.index(command) + 1]
+                self._startEngines(go_commands)
 
             elif userCommand.startswith("position"):
                 self.handlePosition(userCommand)
 
-            elif userCommand == "exit":
+            elif userCommand == "quit":
                 exit = True
             elif userCommand == "stop":
                 for en in self._engines:
@@ -91,19 +106,27 @@ class CombiChess:
     def _onEngine2Finished(self, command):
         self._onFinished(command, 2)
 
-    def _startEngine(self, index, callback):
+    def _startEngine(self, index, callback, cmds):
         self._engines[index].position(self.board)
-        command = self._engines[index].go(movetime=1000, async_callback=callback)
+        command = self._engines[index].go(
+            wtime=cmds.get("wtime"),
+            btime=cmds.get("btime"),
+            winc=cmds.get("winc"),
+            binc=cmds.get("binc"),
+            depth=cmds.get("depth"),
+            nodes=cmds.get("nodes"),
+            movetime=cmds.get("movetime"),
+            async_callback=callback)
 
     # mprint("info string started engine " + str(index))
 
-    def _startEngines(self):
+    def _startEngines(self, go_commands):
         self._moves = [None, None, None]
         self._canceled = False
 
-        self._startEngine(0, self._onEngine0Finished)
-        self._startEngine(1, self._onEngine1Finished)
-        self._startEngine(2, self._onEngine2Finished)
+        self._startEngine(0, self._onEngine0Finished, go_commands)
+        self._startEngine(1, self._onEngine1Finished, go_commands)
+        self._startEngine(2, self._onEngine2Finished, go_commands)
 
     # this function is called after a engine is done. This means it is called multiple times!
     def _onFinished(self, command, index):
@@ -159,9 +182,15 @@ class CombiChess:
         try:
             # handle building up the board from a FEN string
             if words[1] == "fen":
-                fen = positionInput.split(' ', 2)[2]
-                printAndFlush("")
-                self.board.set_fen(fen)
+                rest = positionInput.split(' ', 2)[2]
+                if "moves" in rest:
+                    rest = rest.split()
+                    fen, moves = " ".join(rest[:6]), rest[7:]
+                    self.board.set_fen(fen)
+                    for move in moves:
+                        self.board.push_uci(move)
+                else:
+                    self.board.set_fen(rest)
             # handle board from startpos command, building up the board with moves
             elif words[1] == "startpos":
                 self.board.reset()
@@ -175,7 +204,7 @@ class CombiChess:
             printAndFlush(e)
 
         # show the board
-        printAndFlush(self.board)
+        # printAndFlush(self.board)
 
     # prints stats on how often was listened to master and how often to children
     def printStats(self):
@@ -186,10 +215,7 @@ class CombiChess:
         printAndFlush("info string Master % " + str(masterPercent))
 
 
-
 # UTILS
 # This function flushes stdout after writing so the UCI GUI sees it
 def printAndFlush(text):
-    arg = str(text)
-    sys.stdout.write(arg + "\n")
-    sys.stdout.flush()
+    print(text, flush=True)
