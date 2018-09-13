@@ -46,4 +46,10 @@ Combichess with both Stockfish 5 and Komodo8 as master seems to  be quite signif
 ## Using CombiChess
 To use combichess, clone the project or download it as a zip. Unzip it if needed, and then place the engines you want to use in the engines folder. Open launcher.py and change the filenames to the ones in the engines folder you want to use.
 
+Combichess has one dependency: python-chess. Assuming you have python on your computer, you can install it by opening a terminal and typing the following:
+
+```
+pip install python-chess
+```
+
 To run CombiChess, execute the launcher.py, NOT the combichess.py!
