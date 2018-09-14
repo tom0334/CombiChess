@@ -15,7 +15,7 @@ For the best results, the 3 engines that are used need to be as equal in strengt
   
   ## Testing 
   
-  For testing, i used the [silver suite](https://en.chessbase.com/post/test-your-engines-the-silver-openings-suite) of openings. I used 100 games, with a fixed time of one second per move. More testing will follow. 
+  For testing, i used the [silver suite](https://en.chessbase.com/post/test-your-engines-the-silver-openings-suite) of openings. I used 100 games, with a fixed time of one second per move. 
   
   The engines that i used, with their elo rating according to [CCRL](http://www.computerchess.org.uk/ccrl/404/cgi/compare_engines.cgi?class=Free+single-CPU+engines&num_best_in_class=1&print=Rating+list&profile_step=50&profile_numbers=1&print=Results+table&print=LOS+table&table_size=100&ct_from_elo=0&ct_to_elo=10000&match_length=30&cross_tables_for_best_versions_only=1&sort_tables=by+rating&diag=0&reference_list=None&recalibrate=no)  are listed below 
   
@@ -40,8 +40,19 @@ This table shows all results so far. The scores are all from the POV of Combiche
 |**Komodo 8**                | 27 - 20     	                | 36 - 15  	                 | 52 - 14        	               |
 |**Andscacs 0.93**           | 39 - 16     	                | 38 - 11  	                 | 46 - 9         	               |
 
+
+The following (in progress) table shows the same games, but played with a non fixed time per move. This means that some engines are done earlier than others. Time controll was set to 1 minute plus 0,5 seconds per move.
+
+| ↓OPPONENT↓  →MASTER ENGINE→| CombiChess With Stockfish 5 	|  CombiChess with Komodo 8 	| CombiChess with Andscacs 0.93 	|
+|----------------------------|------------------------------|----------------------------|--------------------------------|
+|**Stockfish 5**             | 32 - 12                 	    | -  	                       | -                         |
+|**Komodo 8**                | -      	                     | -  	                       | -         	               |
+|**Andscacs 0.93**           | -      	                     | -  	                       |  -          	               |
+
+
+
 ## Initial Conclusion
-Combichess with both Stockfish 5 and Komodo8 as master seems to  be quite significantly stronger than any of the 3 engines that it uses! More testing with other engines as master is coming soon!  
+Combichess with Stockfish 5, Komodo8 and Andscacs as master seems to  be quite significantly stronger than any of the 3 engines that it uses! More testing with non constant time per move is coming soon.  
 
 ## Using CombiChess
 To use combichess, clone the project or download it as a zip. Unzip it if needed, and then place the engines you want to use in the engines folder. Open launcher.py and change the filenames to the ones in the engines folder you want to use.
